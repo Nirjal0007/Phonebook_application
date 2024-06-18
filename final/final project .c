@@ -84,8 +84,9 @@ void loginPage()
     FILE *fileLogin;
     char username[50], pass[50],forgetPass;
     system("cls");
-    printf("\n\t\t\t---------Login Page--------");
-
+    printf("\t\t\t:*********************************************************************:\n");
+    printf("\t\t\t\t\t\tLogin Page\n");
+    printf("\t\t\t:*********************************************************************:\n\n");
     fileLogin = fopen("LoginPage.DAT", "rb");
     rewind(fileLogin);
     if (fileLogin == NULL) 
@@ -178,7 +179,7 @@ void signUp()
     }
     system("cls");
     printf("\t\t\t:*********************************************************************:\n");
-    printf("\t\t\t\t\t\tLogin Page\n");
+    printf("\t\t\t\t\t\tSign Up\n");
     printf("\t\t\t:*********************************************************************:\n\n");
 	fflush(stdin);
     printf("\nEnter Name: ");
@@ -227,6 +228,7 @@ void signUp()
             Sleep(4000);
             goto password_check;
     }
+    
 	password_len = strlen(form.password);
 	if(password_len>15)
 	{
@@ -290,6 +292,7 @@ void signUp()
 void forgotPassword()
 {
 	FILE *fileLogin;
+	int password_len;
     fileLogin = fopen("LoginPage.DAT", "rb+");
     if (fileLogin == NULL)
 	{
@@ -297,13 +300,13 @@ void forgotPassword()
         exit(0);
     }
 	long long int forgot_password_number;
-	char forgot_password_username[15],new_password[15];
+	char forgot_password_username[15],new_password[15],confPass[15];
 	int count_not_found=0;
 	fflush(stdin);
 	rewind(fileLogin);
 	system("cls");
 	printf("\t\t\t:*********************************************************************:\n");
-    printf("\t\t\t\t\t\tSearch\n");
+    printf("\t\t\t\t\t\tForget Password\n");
     printf("\t\t\t:*********************************************************************:\n");
 	printf("\n Enter username: ");
 	fflush(stdin);
@@ -317,14 +320,77 @@ void forgotPassword()
 		if (strcmp(forgot_password_username,form.username)==0 && (forgot_password_number==form.phone))
 		{
 				system("cls");
-				
+				repass:
 				printf("\n *************** Reset Password****************\n\n");
 				/*printf("\n Username                       |                 Password                    ");
 				printf("\n Username = %s      |      Password = %s", form.username, form.password);
 				*/
 				printf("\nEnter New Password: ");
 				fflush(stdin);
-				gets(new_password);
+				//gets(new_password);
+				hidePass(new_password);
+				printf("\nConfirm Password: ");
+				//gets(confirmPass);
+				hidePass(confPass);
+				if (strcmp(new_password,confPass)!= 0) 
+					{
+       					loading();
+            			printf("\nPasswords do not match. Please try again.\n");
+            			Sleep(4000);
+            			system("cls");
+            			goto repass;	
+    				}
+    			password_len = strlen(new_password);
+	if(password_len>15)
+	{
+		printf("\n *************************************************************");
+		printf("\n Password is too Long.... Must have maximum 15 Characters");
+		printf("\n *************************************************************");
+		Sleep(5000);
+		goto repass;
+		
+	}
+	int i=0;
+	fflush(stdin);
+	int count_numbers=0;
+	int count_alphabets=0;
+	int count_special_characters=0;
+	for(i=0; i<15; i++)
+	{
+		if(new_password[i]>=48 && new_password[i]<=57)
+		{
+			count_numbers++;
+		}
+		if(new_password[i]>='A' && new_password[i]<='Z')
+		{
+			count_alphabets++;
+		}
+		if(new_password[i]=='@' || new_password[i]=='#' || new_password[i]=='*' || new_password[i]=='$')
+		{
+			count_special_characters++;
+		}
+	}
+	loading();
+	if(count_numbers>0 && count_alphabets>0 && count_special_characters>0 )
+	{
+		printf("\n *************************************************");
+		printf("\n The Entered Password is Strong");
+		printf("\n *************************************************");
+		loading();
+		system("cls");
+	}
+	else
+	{
+		
+		printf("\n\n");
+		printf("\n *************************************************");
+		printf("\n The Entered Password is not Strong Enough");
+		printf("\n *************************************************");
+		loading();
+		system("cls");
+		goto repass;
+		
+	}
 				strcpy(form.password,new_password);
 				fseek(fileLogin,-sizeof(form),SEEK_CUR);
 				fwrite(&form,sizeof(form),1,fileLogin);
@@ -708,7 +774,7 @@ void birthday_remainder()
 
     snprintf(current_date,sizeof(current_date),"%02d-%02d",tm.tm_mon + 1,tm.tm_mday);
 
-    ptr=fopen("Info.DAT","r");
+    ptr=fopen("Info.DAT","rb");
     if (ptr==NULL) 
 	{
         printf("File Not Found!\n");

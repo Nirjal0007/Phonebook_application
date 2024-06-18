@@ -77,34 +77,8 @@ void loginPage()
     printf("\n-------------------------------------------");
     fflush(stdin);
     printf("\nUsername: ");
-   // gets(username);
-    fgets(username, sizeof(username), stdin);
+    gets(username);
     fflush(stdin);
-    rewind(fileLogin);
-    while (fread(&form,sizeof(form),1,fileLogin)==1) 
-	{
-        count++;
-        if (strcmp(username, form.username) == 0) 
-		{
-            break; 
-        }
-    }
-    fclose(fileLogin);
-
-    if (count == 0) 
-	{
-        system("cls");
-       // printf("\n ***********************ERROR*************************");
-        printf("\n ******************************************************");
-        printf("\n Username does not exist.");
-        printf("\n Please Sign up your account and then Login\n");
-        printf("\n");
-        system("pause");
-        system("cls");
-        return;
-    }
-    fflush(stdin);
-    
     while(i<3)
     {
 	    printf("\n -------------------------------------------");
@@ -113,7 +87,6 @@ void loginPage()
 	    hidePass(pass);
 	    fflush(stdin);
 	    rewind(fileLogin);
-	    loading();
 	    count=0;
 	
 	    while (fread(&form, sizeof(form), 1, fileLogin)==1)
@@ -127,10 +100,11 @@ void loginPage()
 	            printf("\n *********************************************");
 	            printf("\n\n");
 	            fclose(fileLogin);
-                printf("\n");
-                loading();
-                system("cls");
-                return; 
+	            loading();
+	            system("cls");
+               // mainMenu();
+                //system("pause"); 
+				break;               
 	        }
 	    }
 		if(count==0)
@@ -163,13 +137,13 @@ void loginPage()
 	}
 	if(forgetPass=='n'||forgetPass=='N')
 	{
+		system("cls");
 		return;
 	}
     printf("\n");
     system("pause");
     system("cls");
 }
-
 void signUp() 
 {
     FILE *fileLogin;
@@ -321,16 +295,17 @@ void forgotPassword()
 				*/
 				printf("\nEnter New Password: ");
 				fflush(stdin);
-				gets(new_password);
+				//gets(new_password);
+				hidePass(new_password);
 				strcpy(form.password,new_password);
 				fseek(fileLogin,-sizeof(form),SEEK_CUR);
 				fwrite(&form,sizeof(form),1,fileLogin);
 				printf("\n password successfully reset\n");
 				count_not_found++;
-				system("pause");
+				//system("pause");
+				loading();
 				system("cls");
 				break;
-		
 		}
 	}
 	if(count_not_found==0)
