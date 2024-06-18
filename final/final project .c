@@ -19,6 +19,7 @@ struct Data {
     char email[30];
     char dob[11];
 }info;
+
 void loginPage();
 void forgotPassword();
 void signUp();
@@ -84,6 +85,7 @@ void loginPage()
     FILE *fileLogin;
     char username[50], pass[50],forgetPass;
     system("cls");
+    reusername:
     printf("\t\t\t:*********************************************************************:\n");
     printf("\t\t\t\t\t\tLogin Page\n");
     printf("\t\t\t:*********************************************************************:\n\n");
@@ -99,6 +101,24 @@ void loginPage()
     fflush(stdin);
     printf("\nUsername: ");
     gets(username);
+    	while (fread(&form, sizeof(form), 1, fileLogin)==1)
+		{
+			count ++;
+	        if(strcmp(username, form.username) != 0)
+			{
+	            //system("cls");
+	            printf("\n *********************************************");
+	            printf("\n Username doesn't Exist'");
+	            printf("\n *********************************************");
+	            printf("\n\n");
+	            fclose(fileLogin);
+	            loading();
+	            system("cls");
+	            goto reusername;
+                //mainMenu();
+                system("pause");                
+	        }
+	    }
     fflush(stdin);
     while(i<3)
     {
@@ -171,7 +191,7 @@ void signUp()
 {
     FILE *fileLogin;
     int password_len;
-    char confirmPass[15];
+    char confirmPass[15],chkUsername[15];
     fileLogin = fopen("LoginPage.DAT", "ab+");
     if (fileLogin == NULL) {
         printf("\nFile Not Found");
@@ -189,14 +209,39 @@ void signUp()
     gets(form.address);
 	fflush(stdin);
     printf("\nEnter phone no: ");
+    rephone:
     scanf("%lld", &form.phone);
+    if(form.phone<1000000000||form.phone>9999999999) //check if the number is of exactly 10 digits
+	{
+        printf("Error: Phone number must be exactly 10 digits.\n");
+        goto rephone;
+    }
 	fflush(stdin);
     printf("\nEnter email: ");
     gets(form.email);
 	fflush(stdin);
+    reuser:
     printf("\nEnter username: ");
-    gets(form.username);
-	fflush(stdin);
+    gets(chkUsername);
+    while (fread(&form, sizeof(form), 1, fileLogin)==1)
+		{
+			//count ++;
+	        if(strcmp(chkUsername, form.username) == 0)
+			{
+	            //system("cls");
+	            printf("\n *********************************************");
+	            printf("\n Username Already Exist. Try Again.'");
+	            printf("\n *********************************************");
+	            printf("\n\n");
+	            fclose(fileLogin);
+	            loading();
+	            system("cls");
+	            goto reuser;
+               // mainMenu();
+                //system("pause"); 
+				break;               
+	        }
+	    }
 	// Code for Strong Password
 	fflush(stdin);
 	password_check:

@@ -64,7 +64,7 @@ void loginPage()
     FILE *fileLogin;
     char username[50], pass[50],forgetPass;
     system("cls");
-    printf("\n\t\t\t---------Login Page--------");
+    //printf("\n\t\t\t---------Login Page--------");
 
     fileLogin = fopen("LoginPage.DAT", "rb");
     rewind(fileLogin);
@@ -73,11 +73,32 @@ void loginPage()
         printf("\n File Not Found");
         exit(0);
     }
+    reusername:
+    printf("\n\t\t\t *****************Login Page*****************\n");
     printf("\n\n");
     printf("\n-------------------------------------------");
     fflush(stdin);
     printf("\nUsername: ");
     gets(username);
+    	while (fread(&form, sizeof(form), 1, fileLogin)==1)
+		{
+			count ++;
+	        if(strcmp(username, form.username) != 0)
+			{
+	            //system("cls");
+	            printf("\n *********************************************");
+	            printf("\n Username doesn't Exist'");
+	            printf("\n *********************************************");
+	            printf("\n\n");
+	            fclose(fileLogin);
+	            loading();
+	            system("cls");
+	            goto reusername;
+               // mainMenu();
+                //system("pause"); 
+				break;               
+	        }
+	    }
     fflush(stdin);
     while(i<3)
     {
@@ -148,7 +169,7 @@ void signUp()
 {
     FILE *fileLogin;
     int password_len;
-    char confirmPass[15];
+    char confirmPass[15],chkUsername[50];
     fileLogin = fopen("LoginPage.DAT", "ab+");
     if (fileLogin == NULL) {
         printf("\nFile Not Found");
@@ -167,9 +188,30 @@ void signUp()
     printf("\nEnter email: ");
     gets(form.email);
 	fflush(stdin);
+	reuser:
     printf("\nEnter username: ");
-    gets(form.username);
+    gets(chkUsername);
+    while (fread(&form, sizeof(form), 1, fileLogin)==1)
+		{
+			//count ++;
+	        if(strcmp(chkUsername, form.username) == 0)
+			{
+	            //system("cls");
+	            printf("\n *********************************************");
+	            printf("\n Username Already Exist. Try Again.'");
+	            printf("\n *********************************************");
+	            printf("\n\n");
+	            fclose(fileLogin);
+	            loading();
+	            system("cls");
+	            goto reuser;
+               // mainMenu();
+                //system("pause"); 
+				break;               
+	        }
+	    }
 	fflush(stdin);
+	strcpy(chkUsername,form.username);
 	// Code for Strong Password
 	fflush(stdin);
 	password_check:
@@ -247,9 +289,6 @@ void signUp()
 		goto password_check;
 		
 	}
-    strcpy(login.username, form.username);
-    strcpy(login.pass, form.password);
-    
     fwrite(&form, sizeof(form), 1, fileLogin);
     
 	fclose(fileLogin);
