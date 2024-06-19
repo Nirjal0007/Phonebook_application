@@ -79,11 +79,14 @@ void loginMenu()
         }
     }
 }
+
 void loginPage() 
 {
-    int i = 0, count = 0;
+    int i = 0;
     FILE *fileLogin;
-    char username[50], pass[50],forgetPass;
+    char username[40], pass[15],forgetPass;
+    int usernameExists = 0;
+    int passwordCorrect = 0;
     system("cls");
     reusername:
     printf("\t\t\t:*********************************************************************:\n");
@@ -101,7 +104,7 @@ void loginPage()
     fflush(stdin);
     printf("\nUsername: ");
     gets(username);
-    	while (fread(&form, sizeof(form), 1, fileLogin)==1)
+    /*	while (fread(&form, sizeof(form), 1, fileLogin)==1)
 		{
 			count ++;
 	        if(strcmp(username, form.username) != 0)
@@ -118,7 +121,7 @@ void loginPage()
                 //mainMenu();
                 system("pause");                
 	        }
-	    }
+	    }*/
     fflush(stdin);
     while(i<3)
     {
@@ -128,12 +131,33 @@ void loginPage()
 	    hidePass(pass);
 	    fflush(stdin);
 	    rewind(fileLogin);
-	    count=0;
-	
-	    while (fread(&form, sizeof(form), 1, fileLogin)==1)
+        loading();
+        while (fread(&form, sizeof(form), 1, fileLogin) == 1)
 		{
-			count ++;
-	        if ((strcmp(username, form.username) == 0) && (strcmp(pass, form.password) == 0)) 
+            if (strcmp(username, form.username) == 0) 
+			{
+                usernameExists = 1;
+                if (strcmp(pass, form.password) == 0) 
+				{
+                    passwordCorrect = 1;
+                    break;
+                }
+            }
+        }
+        if(usernameExists==0)
+		 {
+	        //printf("\n ***********************ERROR*************************");
+	        printf("\n ******************************************************");
+	        printf("\n Incorrect Username or password");
+	        printf("\n ******************************************************");
+	        printf("\n Please Sign up your account and then Login");
+	        fclose(fileLogin);
+            printf("\n");
+        	loading();
+            system("cls");
+            loginMenu();
+	    }
+	    if (usernameExists == 1 && passwordCorrect == 1) 
 			{
 	            system("cls");
 	            printf("\n *********************************************");
@@ -144,47 +168,39 @@ void loginPage()
 	            loading();
 	            system("cls");
                 mainMenu();
-                //system("pause");
-                
-                
+                //system("pause");    
 	        }
-	    }
-		if(count==0)
-		 {
-	        system("cls");
-	        printf("\n ***********************ERROR*************************");
-	        printf("\n ******************************************************");
-	        printf("\n No record Found");
-	        printf("\n Please Sign up your account and then Login");
-	        fclose(fileLogin);
-            printf("\n");
-        	system("pause");
-            system("cls");
-            return; 
-	    }
-	    printf("\n Incorrect Password. Try Again.");
-	    i++;
+	        else
+			{
+		 
+			    printf("\n Incorrect Password. Try Again.");
+			    i++;
+			    if(i==3)
+			    {
+					system("cls");
+					//printf("\n ***********************ERROR*************************");
+				    printf("\n ******************************************************");
+				    printf("\n Too many incorrect password attempts.");
+				    printf("\n ******************************************************");
+				    fclose(fileLogin);
+				    printf("\nDid you Forget Your Password?");
+				    printf("\nYes(y) or No(n): ");
+				    scanf("%c",&forgetPass);
+				    if(forgetPass=='y'||forgetPass=='Y')
+				    {
+				    	forgotPassword();
+					}
+					if(forgetPass=='n'||forgetPass=='N')
+					{
+						system("cls");
+						return;
+					}
+				    printf("\n");
+				    system("pause");
+				    system("cls");
+				}
+			}
 	}
-	system("cls");
-	//printf("\n ***********************ERROR*************************");
-    printf("\n ******************************************************");
-    printf("\n Too many incorrect password attempts.");
-    fclose(fileLogin);
-    printf("\nDid you Forget Your Password?");
-    printf("\nYes(y) or No(n): ");
-    scanf("%c",&forgetPass);
-    if(forgetPass=='y'||forgetPass=='Y')
-    {
-    	forgotPassword();
-	}
-	if(forgetPass=='n'||forgetPass=='N')
-	{
-		system("cls");
-		return;
-	}
-    printf("\n");
-    system("pause");
-    system("cls");
 }
 
 void signUp() 
@@ -269,7 +285,9 @@ void signUp()
 	if (strcmp(form.password,confirmPass)!= 0) 
 	{
        		loading();
+       		printf("\n *************************************************************");
             printf("\nPasswords do not match. Please try again.\n");
+            printf("\n *************************************************************");
             Sleep(4000);
             goto password_check;
     }
@@ -280,7 +298,7 @@ void signUp()
 		printf("\n *************************************************************");
 		printf("\n Password is too Long.... Must have maximum 15 Characters");
 		printf("\n *************************************************************");
-		Sleep(5000);
+		loading();
 		goto password_check;
 		
 	}
@@ -309,18 +327,17 @@ void signUp()
 	{
 		printf("\n *************************************************");
 		printf("\n The Entered Password is Strong");
-		printf("\n *************************************************");
-		Sleep(5000);
+		printf("\n *************************************************\n");
+		loading();
 		
 	}
 	else
 	{
-		
 		printf("\n\n");
 		printf("\n *************************************************");
 		printf("\n The Entered Password is not Strong Enough");
-		printf("\n *************************************************");
-		Sleep(5000);
+		printf("\n *************************************************\n");
+		loading();
 		goto password_check;
 		
 	}

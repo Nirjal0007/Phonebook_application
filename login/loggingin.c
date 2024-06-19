@@ -80,22 +80,13 @@ void loginPage()
     fflush(stdin);
     printf("\nUsername: ");
     gets(username);
+    int usernameExists=0;
+    
     	while (fread(&form, sizeof(form), 1, fileLogin)==1)
 		{
-			count ++;
-	        if(strcmp(username, form.username) != 0)
+	        if(strcmp(username, form.username) == 0)
 			{
-	            //system("cls");
-	            printf("\n *********************************************");
-	            printf("\n Username doesn't Exist'");
-	            printf("\n *********************************************");
-	            printf("\n\n");
-	            fclose(fileLogin);
-	            loading();
-	            system("cls");
-	            goto reusername;
-               // mainMenu();
-                //system("pause"); 
+	            usernameExists++;
 				break;               
 	        }
 	    }
@@ -128,7 +119,7 @@ void loginPage()
 				break;               
 	        }
 	    }
-		if(count==0)
+		if(usernameExists!=0)
 		 {
 	        system("cls");
 	        printf("\n ***********************ERROR*************************");
@@ -184,6 +175,7 @@ void signUp()
 	fflush(stdin);
     printf("\nEnter phone no: ");
     scanf("%lld", &form.phone);
+    
 	fflush(stdin);
     printf("\nEnter email: ");
     gets(form.email);
