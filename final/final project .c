@@ -123,8 +123,6 @@ void loginPage()
 	        }
 	    }*/
     fflush(stdin);
-    while(i<3)
-    {
 	    printf("\n -------------------------------------------");
 	    printf("\nPassword: ");
 	    //gets(pass);
@@ -200,7 +198,6 @@ void loginPage()
 				    system("cls");
 				}
 			}
-	}
 }
 
 void signUp() 
@@ -224,8 +221,8 @@ void signUp()
     printf("\nEnter address: ");
     gets(form.address);
 	fflush(stdin);
+	rephone:
     printf("\nEnter phone no: ");
-    rephone:
     scanf("%lld", &form.phone);
     if(form.phone<1000000000||form.phone>9999999999) //check if the number is of exactly 10 digits
 	{
@@ -258,6 +255,7 @@ void signUp()
 				break;               
 	        }
 	    }
+	strcpy(form.username,chkUsername);
 	// Code for Strong Password
 	fflush(stdin);
 	password_check:
@@ -270,7 +268,6 @@ void signUp()
 	printf("\n 2. Must contain atleast One Digit/Number");
 	printf("\n 3. Must contain atleast One Symbol '@', '#', '*', '$'");
 	printf("\n 4. Must contain atleast One Capital Letter");
-	
 	printf("\n *******************************************************************");
 	printf("\n\n");
 	fflush(stdin);
@@ -345,12 +342,13 @@ void signUp()
 	fclose(fileLogin);
     system("cls");
     printf("\n *********************************************");
-    printf("\n\t\t\t Successfully Signed Up");
+    printf("\n\t\tSuccessfully Signed Up");
     printf("\n *********************************************");
     printf("\n");
     loading();
     system("cls");
 }
+
 void forgotPassword()
 {
 	FILE *fileLogin;
