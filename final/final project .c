@@ -122,6 +122,7 @@ void loginPage()
                 system("pause");                
 	        }
 	    }*/
+	    repass:
     fflush(stdin);
 	    printf("\n -------------------------------------------");
 	    printf("\nPassword: ");
@@ -130,6 +131,7 @@ void loginPage()
 	    fflush(stdin);
 	    rewind(fileLogin);
         loading();
+        
         while (fread(&form, sizeof(form), 1, fileLogin) == 1)
 		{
             if (strcmp(username, form.username) == 0) 
@@ -173,6 +175,10 @@ void loginPage()
 		 
 			    printf("\n Incorrect Password. Try Again.");
 			    i++;
+			    if(i<3)
+			    {
+			    	goto repass;
+			    }
 			    if(i==3)
 			    {
 					system("cls");
@@ -248,7 +254,7 @@ void signUp()
 	            printf("\n\n");
 	            fclose(fileLogin);
 	            loading();
-	            system("cls");
+	            //system("cls");
 	            goto reuser;
                // mainMenu();
                 //system("pause"); 
@@ -778,11 +784,15 @@ void delete_contact()
     rename("Temp.DAT", "Info.DAT");
     if(flag==1) 
 	{
-        printf("\nContact deleted successfully\n");
+		printf("\t\t\t:*********************************************************************:\n");
+        printf("\n\t\tContact deleted successfully\n");
+        printf("\t\t\t:*********************************************************************:\n");
     } 
 	else 
 	{
-        printf("\nContact not found\n");
+		printf("\t\t\t:*********************************************************************:\n");
+        printf("\n\t\tContact not found\n");
+        printf("\t\t\t:*********************************************************************:\n");
     }
     printf("\n");
     system("pause");
