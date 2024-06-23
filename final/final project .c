@@ -19,6 +19,20 @@ struct Data {
     char email[30];
     char dob[11];
 }info;
+void red () 
+{
+  printf("\033[1;31m");
+}
+
+void green()
+{
+  printf("\033[1;32m");
+}
+
+void reset () 
+{
+  printf("\033[0m");
+}
 
 void loginPage();
 void forgotPassword();
@@ -47,6 +61,7 @@ void loginMenu()
 	int choice;
     while (1)
 	{
+		reset();
         printf("\t\t\t:*********************************************************************:\n");
         printf("\t\t\t\t\t\tWelcome To Phonebook Application\n");
         printf("\t\t\t:*********************************************************************:\n");
@@ -74,7 +89,9 @@ void loginMenu()
             	exit(0);
                 break;
             default:
+            	red();
                 printf("\n You Entered Wrong Choice......");
+                system("cls");
                 break;
         }
     }
@@ -88,6 +105,7 @@ void loginPage()
     int usernameExists = 0;
     int passwordCorrect = 0;
     system("cls");
+    reset();
     reusername:
     printf("\t\t\t:*********************************************************************:\n");
     printf("\t\t\t\t\t\tLogin Page\n");
@@ -96,32 +114,16 @@ void loginPage()
     rewind(fileLogin);
     if (fileLogin == NULL) 
 	{
+		red();
         printf("\n File Not Found");
         exit(0);
     }
+    reset();
     printf("\n\n");
     printf("\n-------------------------------------------");
     fflush(stdin);
     printf("\nUsername: ");
     gets(username);
-    /*	while (fread(&form, sizeof(form), 1, fileLogin)==1)
-		{
-			count ++;
-	        if(strcmp(username, form.username) != 0)
-			{
-	            //system("cls");
-	            printf("\n *********************************************");
-	            printf("\n Username doesn't Exist'");
-	            printf("\n *********************************************");
-	            printf("\n\n");
-	            fclose(fileLogin);
-	            loading();
-	            system("cls");
-	            goto reusername;
-                //mainMenu();
-                system("pause");                
-	        }
-	    }*/
 	    repass:
     fflush(stdin);
 	    printf("\n -------------------------------------------");
@@ -146,35 +148,40 @@ void loginPage()
         }
         if(usernameExists==0)
 		 {
-	        //printf("\n ***********************ERROR*************************");
+		 	red();
 	        printf("\n ******************************************************");
 	        printf("\n Incorrect Username or password");
 	        printf("\n ******************************************************");
 	        printf("\n Please Sign up your account and then Login");
 	        fclose(fileLogin);
             printf("\n");
+            reset();
         	loading();
             system("cls");
             loginMenu();
 	    }
 	    if (usernameExists == 1 && passwordCorrect == 1) 
 			{
+				green();
 	            system("cls");
+	            green();
 	            printf("\n *********************************************");
 	            printf("\n Successfully Logged in into System");
 	            printf("\n *********************************************");
 	            printf("\n\n");
+	            reset();
 	            fclose(fileLogin);
 	            loading();
 	            system("cls");
-                mainMenu();
-                //system("pause");    
+                mainMenu();   
 	        }
 	        else
 			{
-		 
+				
+		 		red();
 			    printf("\n Incorrect Password. Try Again.");
 			    i++;
+			    reset();
 			    if(i<3)
 			    {
 			    	goto repass;
@@ -182,11 +189,12 @@ void loginPage()
 			    if(i==3)
 			    {
 					system("cls");
-					//printf("\n ***********************ERROR*************************");
+					red();
 				    printf("\n ******************************************************");
 				    printf("\n Too many incorrect password attempts.");
 				    printf("\n ******************************************************");
 				    fclose(fileLogin);
+				    reset();
 				    printf("\nDid you Forget Your Password?");
 				    printf("\nYes(y) or No(n): ");
 				    scanf("%c",&forgetPass);
@@ -232,8 +240,11 @@ void signUp()
     scanf("%lld", &form.phone);
     if(form.phone<1000000000||form.phone>9999999999) //check if the number is of exactly 10 digits
 	{
+		red();
         printf("Error: Phone number must be exactly 10 digits.\n");
+        reset();
         goto rephone;
+        
     }
 	fflush(stdin);
     printf("\nEnter email: ");
@@ -244,20 +255,17 @@ void signUp()
     gets(chkUsername);
     while (fread(&form, sizeof(form), 1, fileLogin)==1)
 		{
-			//count ++;
 	        if(strcmp(chkUsername, form.username) == 0)
 			{
-	            //system("cls");
+	            red();
 	            printf("\n *********************************************");
 	            printf("\n Username Already Exist. Try Again.'");
 	            printf("\n *********************************************");
 	            printf("\n\n");
 	            fclose(fileLogin);
+	            reset();
 	            loading();
-	            //system("cls");
 	            goto reuser;
-               // mainMenu();
-                //system("pause"); 
 				break;               
 	        }
 	    }
@@ -280,28 +288,30 @@ void signUp()
 	printf("\n:--------------------------------------------:");
 	fflush(stdin);
 	printf("\nPassword: ");
-	//gets(form.password);
 	hidePass(form.password);
 	printf("\nConfirm Password: ");
-	//gets(confirmPass);
 	hidePass(confirmPass);
 	if (strcmp(form.password,confirmPass)!= 0) 
 	{
        		loading();
+       		red();
        		printf("\n *************************************************************");
             printf("\nPasswords do not match. Please try again.\n");
             printf("\n *************************************************************");
             Sleep(4000);
+            reset();
             goto password_check;
     }
     
 	password_len = strlen(form.password);
 	if(password_len>15)
 	{
+		red();
 		printf("\n *************************************************************");
 		printf("\n Password is too Long.... Must have maximum 15 Characters");
 		printf("\n *************************************************************");
 		loading();
+		reset();
 		goto password_check;
 		
 	}
@@ -328,18 +338,22 @@ void signUp()
 	loading();
 	if(count_numbers>0 && count_alphabets>0 && count_special_characters>0 )
 	{
+		green();
 		printf("\n *************************************************");
 		printf("\n The Entered Password is Strong");
 		printf("\n *************************************************\n");
+		reset();
 		loading();
 		
 	}
 	else
 	{
 		printf("\n\n");
+		red();
 		printf("\n *************************************************");
 		printf("\n The Entered Password is not Strong Enough");
 		printf("\n *************************************************\n");
+		reset();
 		loading();
 		goto password_check;
 		
@@ -347,10 +361,12 @@ void signUp()
     fwrite(&form, sizeof(form), 1, fileLogin);
 	fclose(fileLogin);
     system("cls");
+    green();
     printf("\n *********************************************");
     printf("\n\t\tSuccessfully Signed Up");
     printf("\n *********************************************");
     printf("\n");
+    reset();
     loading();
     system("cls");
 }
@@ -388,31 +404,30 @@ void forgotPassword()
 				system("cls");
 				repass:
 				printf("\n *************** Reset Password****************\n\n");
-				/*printf("\n Username                       |                 Password                    ");
-				printf("\n Username = %s      |      Password = %s", form.username, form.password);
-				*/
 				printf("\nEnter New Password: ");
 				fflush(stdin);
-				//gets(new_password);
 				hidePass(new_password);
 				printf("\nConfirm Password: ");
-				//gets(confirmPass);
 				hidePass(confPass);
 				if (strcmp(new_password,confPass)!= 0) 
 					{
        					loading();
+       					red();
             			printf("\nPasswords do not match. Please try again.\n");
             			Sleep(4000);
             			system("cls");
+            			reset();
             			goto repass;	
     				}
     			password_len = strlen(new_password);
 	if(password_len>15)
 	{
+		red();
 		printf("\n *************************************************************");
 		printf("\n Password is too Long.... Must have maximum 15 Characters");
 		printf("\n *************************************************************");
 		Sleep(5000);
+		reset();
 		goto repass;
 		
 	}
@@ -439,9 +454,11 @@ void forgotPassword()
 	loading();
 	if(count_numbers>0 && count_alphabets>0 && count_special_characters>0 )
 	{
+		green();
 		printf("\n *************************************************");
 		printf("\n The Entered Password is Strong");
 		printf("\n *************************************************");
+		reset();
 		loading();
 		system("cls");
 	}
@@ -449,9 +466,11 @@ void forgotPassword()
 	{
 		
 		printf("\n\n");
+		red();
 		printf("\n *************************************************");
 		printf("\n The Entered Password is not Strong Enough");
 		printf("\n *************************************************");
+		reset();
 		loading();
 		system("cls");
 		goto repass;
@@ -461,9 +480,11 @@ void forgotPassword()
 				fseek(fileLogin,-sizeof(form),SEEK_CUR);
 				fwrite(&form,sizeof(form),1,fileLogin);
 				loading();
+				green();
 				printf("\n *****************************************");
 				printf("\n password successfully reset\n");
 				printf("\n *****************************************");
+				reset();
 				count_not_found++;
 				printf("\n");
 				loading();
@@ -474,15 +495,17 @@ void forgotPassword()
 	fclose(fileLogin);
 	if(count_not_found==0)
 	{
-		//system("cls");
+		red();
 		printf("\n *****************************************");
 		printf("\n The Account is not Registered");
 		printf("\n *****************************************");
 		printf("\n\n");
+		reset();
 		system("pause");
 		system("cls");
 	}
 }
+
 void mainMenu()
 {
 	 while (1) 
@@ -530,7 +553,9 @@ void mainMenu()
                 loginMenu();
                 //break;
             default:
+            	red();
                 printf("\nInvalid Choice\n");
+                reset();
                 break;
         }
     }
@@ -558,7 +583,9 @@ void add_contact()
     scanf("%lld",&info.phone_no);
     if(info.phone_no<1000000000||info.phone_no>9999999999) //check if the number is of exactly 10 digits
 	{
+		red();
         printf("Error: Phone number must be exactly 10 digits.\n");
+        reset();
         goto reenter_phone;
     }
     
@@ -571,12 +598,16 @@ void add_contact()
     gets(info.dob);
     if(validate_dob(info.dob)==0) 
 	{
+		red();
         printf("Error: Date of Birth must be in YYYY-MM-DD format.\n");
+        reset();
         goto reenter_dob;
     }
     fwrite(&info, sizeof(info), 1, ptr);
     fclose(ptr);
+    green();
     printf("\nContact added successfully\n");
+    reset();
     printf("\n");
     system("pause");
     system("cls");
@@ -600,7 +631,9 @@ void display_contact()
     }
     if(count==0) 
 	{
+		red();
         printf("\nNo contacts found\n");
+        reset();
         fclose(ptr);
         return;
 	}
@@ -659,7 +692,8 @@ void search_contact()
     {
         if(strcmp(full_name,info.name)==0) 
 		{
-            printf("Name: %s\n", info.name);
+			
+            printf("\nName: %s\n", info.name);
             printf("Phone number: %lld\n", info.phone_no);
             printf("Email: %s\n", info.email);
             printf("Date of Birth:%s\n",info.dob);
@@ -670,18 +704,21 @@ void search_contact()
 	}	
     if (flag==0) 
 	{
+		red();
         printf("\t\t\t:*********************************************************************:\n");
-    printf("\t\t\t\t\t\tName Not found\n");
-    printf("\t\t\t:*********************************************************************:\n");
-    }
-    fclose(ptr);
-    printf("\n");
-    system("pause");
-    system("cls");
+	    printf("\t\t\t\t\t\tName Not found\n");
+	    printf("\t\t\t:*********************************************************************:\n");
+	    reset();
+	}
+	    fclose(ptr);
+	    printf("\n");
+	    system("pause");
+	    system("cls");
 }
+
 void modify_contact() 
 {
-	    printf("\t\t\t:*********************************************************************:\n");
+	printf("\t\t\t:*********************************************************************:\n");
     printf("\t\t\t\t\t\tModify Contact\n");
     printf("\t\t\t:*********************************************************************:\n");
     FILE *ptr;
@@ -703,23 +740,27 @@ void modify_contact()
 		{
             fseek(ptr,-sizeof(info),SEEK_CUR);
             reenter_phone:
-    		printf("Enter Your Phone Number: ");
+    		printf("\nEnter Your Phone Number: ");
     		scanf("%lld",&info.phone_no);
     		if(info.phone_no<1000000000||info.phone_no>9999999999) //check if the number is of exactly 10 digits
 			{
+				red();
         		printf("Error: Phone number must be exactly 10 digits.\n");
+        		reset();
         		goto reenter_phone;
    			 }
             fflush(stdin);
-            printf("Enter Your Email: ");
+            printf("\nEnter Your Email: ");
     		gets(info.email);
     		fflush(stdin);
     		reenter_dob:
-     		printf("Enter Your Date of Birth (YYY-MM-DD): ");
+     		printf("\nEnter Your Date of Birth (YYY-MM-DD): ");
     		gets(info.dob);
    			 if(validate_dob(info.dob)==0) 
 			{
-        		printf("Error: Date of Birth must be in YYYY-MM-DD format.\n");
+				red();
+        		printf("\nError: Date of Birth must be in YYYY-MM-DD format.\n");
+        		reset();
         		goto reenter_dob;
    			 }
             fwrite(&info, sizeof(info), 1, ptr);
@@ -728,13 +769,18 @@ void modify_contact()
         }
         fflush(stdin);
     }
+    loading();
     if (flag==0) 
 	{
+		red();
         printf("\nName not found\n");
+        reset();
     } 
 	else 
 	{
+		green();
         printf("\nsuccessfully modified\n");
+        reset();
     }
     fclose(ptr);
     printf("\n");
@@ -784,15 +830,19 @@ void delete_contact()
     rename("Temp.DAT", "Info.DAT");
     if(flag==1) 
 	{
-		printf("\t\t\t:*********************************************************************:\n");
+		green();
+		printf("\t\t:*********************************************************************:\n");
         printf("\n\t\tContact deleted successfully\n");
-        printf("\t\t\t:*********************************************************************:\n");
+        printf("\t\t:*********************************************************************:\n");
+        reset();
     } 
 	else 
 	{
-		printf("\t\t\t:*********************************************************************:\n");
+		red();
+		printf("\t\t:*********************************************************************:\n");
         printf("\n\t\tContact not found\n");
-        printf("\t\t\t:*********************************************************************:\n");
+        printf("\t\t:*********************************************************************:\n");
+        reset();
     }
     printf("\n");
     system("pause");
@@ -833,6 +883,7 @@ int validate_dob(char dob[])
     }
     return 1;
 }
+
 void birthday_remainder()
 {
 
@@ -875,7 +926,8 @@ void birthday_remainder()
     system("pause");
     system("cls");
 }
- void loading()
+
+void loading()
 {
 	printf("\nLoading");
     Sleep(500);
