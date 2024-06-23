@@ -19,6 +19,7 @@ struct Data {
     char email[30];
     char dob[11];
 }info;
+
 void red () 
 {
   printf("\033[1;31m");
@@ -382,7 +383,7 @@ void forgotPassword()
         exit(0);
     }
 	long long int forgot_password_number;
-	char forgot_password_username[15],new_password[15],confPass[15];
+	char forgot_password_username[15],new_password[15],confPass[15],email[40];
 	int count_not_found=0;
 	fflush(stdin);
 	rewind(fileLogin);
@@ -396,11 +397,16 @@ void forgotPassword()
 	reenter_phone:
 	printf("\n Enter Phone Number: ");
 	scanf("%lld", &forgot_password_number);
+	fflush(stdin);
+	printf("\nEnter your email: ");
+	gets(email);
+	fflush(stdin);
 	while(fread(&form,sizeof(form),1,fileLogin))
 	{
 		//printf("hello");
-		if (strcmp(forgot_password_username,form.username)==0 && (forgot_password_number==form.phone))
+		if (strcmp(forgot_password_username,form.username)==0 && (forgot_password_number==form.phone) && strcmp(email,form.email)==0)
 		{
+				loading();
 				system("cls");
 				repass:
 				printf("\n *************** Reset Password****************\n\n");
