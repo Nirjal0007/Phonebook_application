@@ -41,7 +41,7 @@ void signUp();
 void loading();
 void mainMenu();
 void add_contact();
-void birthday_remainder();
+void birthday_reminder();
 void display_contact();
 void delete_contact();
 void search_contact();
@@ -303,7 +303,6 @@ void signUp()
             reset();
             goto password_check;
     }
-    
 	password_len = strlen(form.password);
 	if(password_len>15)
 	{
@@ -397,6 +396,14 @@ void forgotPassword()
 	reenter_phone:
 	printf("\n Enter Phone Number: ");
 	scanf("%lld", &forgot_password_number);
+	    if(forgot_password_number<1000000000||forgot_password_number>9999999999) //check if the number is of exactly 10 digits
+	{
+		red();
+        printf("Error: Phone number must be exactly 10 digits.\n");
+        reset();
+        goto reenter_phone;
+        
+    }
 	fflush(stdin);
 	printf("\nEnter your email: ");
 	gets(email);
@@ -495,7 +502,7 @@ void forgotPassword()
 				printf("\n");
 				loading();
 				system("cls");
-				break;
+				loginMenu();
 		}
 	}
 	fclose(fileLogin);
@@ -526,7 +533,7 @@ void mainMenu()
         printf("\t\t\t\t\t3.Search Contact\n");
         printf("\t\t\t\t\t4.Modify Contact\n");
         printf("\t\t\t\t\t5.Delete \n");
-        printf("\t\t\t\t\t6.Birthday Remainder\n");
+        printf("\t\t\t\t\t6.Birthday reminder\n");
         printf("\t\t\t\t\t7.Return To Login Page");
         printf("\n");
         printf("\t\t\t:*********************************************************************:\n");
@@ -551,7 +558,7 @@ void mainMenu()
                 delete_contact();
                 break;
             case 6:
-                birthday_remainder();
+                birthday_reminder();
                 break;
             case 7:
             	loading();
@@ -890,7 +897,7 @@ int validate_dob(char dob[])
     return 1;
 }
 
-void birthday_remainder()
+void birthday_reminder()
 {
 
     FILE *ptr;
